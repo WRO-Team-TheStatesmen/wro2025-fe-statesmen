@@ -1,0 +1,10 @@
+25 June 2025
+- Started building prototype 1
+- Chassis built
+
+26 June 2025
+- Added sensors
+
+27 June 2025
+- Soldering completed
+- Prototype 1 is ready
