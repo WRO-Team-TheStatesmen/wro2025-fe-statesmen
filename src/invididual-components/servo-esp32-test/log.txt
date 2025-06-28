@@ -1,0 +1,3 @@
+28 June 15:52
+- Working on prototype 1
+- Signal pin = 25

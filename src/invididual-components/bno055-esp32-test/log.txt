@@ -1,0 +1,6 @@
+28 June 13:10
+- Working on prototype 1
+- SDA pin = 32
+- SCL pin = 33
+- Problem encountered: yaw values do not work if robot is tilted on roll or pitch axis
+- Problem is because of using Euler angles, as the Adafruit documentation states that if roll / pitch are >45 degrees the yaw will stop working
