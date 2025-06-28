@@ -1,0 +1,5 @@
+28 June 18:23
+- Working
+- UART connections:-
+    - TF Luna 1 = 22, 23
+    - TF Luna 2 = 19, 21
