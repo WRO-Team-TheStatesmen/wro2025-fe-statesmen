@@ -1,0 +1,5 @@
+29 June 12:23
+- Working on Prototype 1
+- Max steer angle = 40 degrees
+    - Because of servo center
+    - Also because of hardware, the lego steering part is touching the main chassis at 40 degrees so it cannot turn any further
