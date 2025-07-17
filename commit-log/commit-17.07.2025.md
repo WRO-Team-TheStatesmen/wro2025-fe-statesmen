@@ -1,0 +1,2 @@
+# Commit - 17 July 2025
+This commit adds a program for centering the servo motor. This will help when adjusting prototype structure. There is also a minor change in the steering-driving script - the servo center is adjusted.

@@ -5,7 +5,7 @@
 #define ENA 14
 
 const int servoPin = 25;
-const int servoCenter = 138;
+const int servoCenter = 96;
 
 void moveServoAngle(int angle){
   angle = constrain(angle,0,180);

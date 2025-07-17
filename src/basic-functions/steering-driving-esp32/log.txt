@@ -3,3 +3,6 @@
 - Max steer angle = 40 degrees
     - Because of servo center
     - Also because of hardware, the lego steering part is touching the main chassis at 40 degrees so it cannot turn any further
+
+16 July 16:23
+- Changed servo center value
