@@ -13,7 +13,7 @@ cv2.createTrackbar('Hue Upper','Trackbars',0,179,nothing)
 cv2.createTrackbar('Saturation Upper','Trackbars',0,255,nothing)
 cv2.createTrackbar('Value Upper','Trackbars',0,255,nothing)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
     ret, frame = cap.read()
