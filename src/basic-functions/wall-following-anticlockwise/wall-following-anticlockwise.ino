@@ -1,3 +1,5 @@
+// Wall Following in Anticlockwise direction
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
@@ -7,9 +9,8 @@
 #define IN2 12
 #define ENA 14
 
-// Right LiDAR
-#define RXD1 22
-#define TXD1 23
+#define RXD2 22
+#define TXD2 23
 
 TwoWire myWire = TwoWire(0);
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &myWire);
@@ -21,8 +22,7 @@ const int servoPin = 25;
 const int servoCenter = 90;
 
 float target_direction = 0.0;
-
-volatile int distance_right = 0;
+bool start_condition = false;
 
 float normalizeAngle(float angle) {
   while (angle > 180) angle -= 360;
@@ -43,18 +43,21 @@ void steer(int direction) {
   moveServoAngle(servoCenter + direction);
 }
 
-// Non-blocking TF-Luna update
-void updateTFLuna(HardwareSerial &sensor, volatile int &distanceVar) {
-  while (sensor.available() >= 9) {
-    if (sensor.read() == 0x59 && sensor.read() == 0x59) {
-      byte low = sensor.read();
-      byte high = sensor.read();
-      int distance = (high << 8) + low;
+void flushLidarBuffer(HardwareSerial &port) {
+  while (port.available()) port.read();
+}
 
-      for (int i = 0; i < 5; i++) sensor.read();
-
-      if (distance <= 500) {
-        distanceVar = distance;
+int readLidar(HardwareSerial &port, const char *label) {
+  uint8_t buf[9];
+  unsigned long start_time = millis();
+  while (millis() - start_time < 50) {
+    if (port.available() >= 9) {
+      port.readBytes(buf, 9);
+      if (buf[0] == 0x59 && buf[1] == 0x59) {
+        uint16_t distance = buf[2] | (buf[3] << 8);
+        return distance;
+      } else {
+        flushLidarBuffer(port);
       }
     }
   }
@@ -62,76 +65,84 @@ void updateTFLuna(HardwareSerial &sensor, volatile int &distanceVar) {
 
 void setup(void) {
   Serial.begin(9600);
-  Serial1.begin(115200, SERIAL_8N1, RXD1, TXD1); // Right LiDAR
-
+  Serial2.begin(115200, SERIAL_8N1, RXD2, TXD2);
   pinMode(servoPin, OUTPUT);
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(ENA, OUTPUT);
-
   steer(0);
   myWire.begin(32, 33);
-
   if (!bno.begin()) {
-    while (1); // Halt if sensor fails to initialize
+    while (1);
   }
-
   delay(2000);
   bno.setExtCrystalUse(true);
-  Serial.println("DEBUG: SETUP COMPLETE (Clockwise Only)");
 }
 
 void loop(void) {
-  updateTFLuna(Serial1, distance_right);
-
-  if (counter < 12) {
+  if (counter < 12)
+  {
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
     analogWrite(ENA, 255);
 
+    int distance_right = readLidar(Serial2, "Forward Check");
+    Serial.print("DEBUG: ");
+    Serial.println(distance_right);
+
     sensors_event_t orientationData;
     bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-    float heading = normalizeAngle(orientationData.orientation.x);
+    float direction = normalizeAngle(orientationData.orientation.x);
 
-    float error = normalizeAngle(heading - target_direction);
+    float error = normalizeAngle(direction - target_direction);
     int steer_val = (int)(error * kp);
     steer_val = constrain(steer_val, -40, 40);
     steer(steer_val);
 
-    if (distance_right >= 50) {
-      target_direction += 90;
+    if (distance_right >= 75) {
+      target_direction -= 90;
       target_direction = normalizeAngle(target_direction);
 
       while (true) {
-        updateTFLuna(Serial1, distance_right);
         bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-        heading = normalizeAngle(orientationData.orientation.x);
-        error = normalizeAngle(heading - target_direction);
-        steer_val = (int)(error * kp);
+        direction = normalizeAngle(orientationData.orientation.x);
+        float error = normalizeAngle(direction - target_direction);
+        int steer_val = (int)(error * kp);
         steer_val = constrain(steer_val, -40, 40);
         steer(steer_val);
         digitalWrite(IN1, HIGH);
         digitalWrite(IN2, LOW);
         analogWrite(ENA, 250);
-        if (abs(error) <= 10) break;
+        if (abs(error) <= 5) break;
+      }
+      int afterturn_distance_right = 100;
+      steer(0);
+      if (counter < 11) {
+        while (afterturn_distance_right >= 50)
+        {
+          digitalWrite(IN1, HIGH);
+          digitalWrite(IN2, LOW);
+          analogWrite(ENA, 250);
+          afterturn_distance_right = readLidar(Serial2, "Afterturn Check");
+        }
+      }
+      
+      counter++;
+      
+      for (int i = 0; i < 10; i++) {
+        int flush_distance = readLidar(Serial2, "Start Check");
       }
 
-      counter++;
-      steer(0);
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      analogWrite(ENA, 250);
-      delay(500);
-
       while (true) {
-        updateTFLuna(Serial1, distance_right);
-        if (distance_right < 50 && distance_right > 0) break;
+        flushLidarBuffer(Serial2);
+        int dist = readLidar(Serial2, "Cooldown Check");
+        if (dist < 50 && dist > 0) break;
         delay(10);
       }
     }
   }
-
-  else {
+  else
+  {
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
     analogWrite(ENA, 255);
@@ -139,6 +150,6 @@ void loop(void) {
     digitalWrite(IN1, LOW);
     digitalWrite(IN2, LOW);
     analogWrite(ENA, 0);
-    while (1); // Stay stopped
+    while (1);
   }
 }
