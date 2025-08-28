@@ -1,6 +1,7 @@
 <center><h1> The Statesmen 2025 </center>
 
-This repository contains all of the documentation for team The Statesmen in the World Robot Olympiad 2025, Future Engineers category. This README.md file is the engineering notebook. It is preferred to view this document [here](https://github.com/WRO-Team-TheStatesmen/wro2025-fe-statesmen/blob/main/README.md)
+This repository contains all of the documentation for team The Statesmen in the World Robot Olympiad 2025, Future Engineers category. This README.md file is the engineering notebook.
+<!-- It is preferred to view this document [here](https://github.com/WRO-Team-TheStatesmen/wro2025-fe-statesmen/blob/main/README.md) -->
 
 ## Table of Contents
 * [Our Team](#our-team)
@@ -54,7 +55,7 @@ This repository contains all of the documentation for team The Statesmen in the 
 <strong>Description: </strong>
 Hey! I am Atharv. I'm a high school freshman from Jaipur, India. This is my second WRO seaon. Last year, I had participated in the Future Innovator category. This year, I wanted a bigger challenge so I am participating in the Future Engineers category. I am working on the software of the robot.
 
-<img src="./other/README-images/OurTeam/Atharv.jpg" alt="Atharv Baluja" width="200px">
+<img src="./other/README-images/OurTeam/Atharv.JPG" alt="Atharv Baluja" width="200px">
 
 ### Arham Jain
 Hello, I am Arham, an 11th-grade student at Neerja Modi School. I have competed in WRO once before in the Future Innovators category two years ago. I was preparing to compete in the Future Engineers category last year before some hurdles derailed my progress. Building on the knowledge and research from last year, I hope to put my effort into the Future Engineers Category again.
@@ -242,7 +243,7 @@ We are using the Ackermann steering system. This system allows the front 2 wheel
   </tr>
   <tr>
     <td width="50%" style="text-align: left;">
-      <img src="./other/README-images/Mobilitymanagement/Ackermann.jpg" alt="Ackermann Steering" width="500px">
+      <img src="./other/README-images/MobilityManagement/Ackermann.jpg" alt="Ackermann Steering" width="500px">
     </td>
   </tr>
 </table>
