@@ -10,8 +10,6 @@ This repository contains all of the documentation for team The Statesmen in the 
   * [Yashvardhan Surana](#yashvardhan-surana)
 * [Robot Photos](#robot-photos)
 * [Robot Videos](#robot-videos)
-  <!-- * [Open Challenge](#open-challenge---default-setup)
-  * [Obstacle Challenge](#obstacle-challenge---setup-1) -->
 * [Mobility Management](#mobility-management)
   * [Motor](#motor)
   * [Motor Driver](#motor-driver)
@@ -787,9 +785,6 @@ At first, we tried to connect all the TF Luna sensors to the ESP32. This did not
 <br>
 <li><strong>Using two BNO055 sensors</strong>: The BNO055 sometimes drifts over periods of extended use. To decrease the drift, we can use 2 sensors and average out the values to get a more accurate value</li>
 <br>
-<li><strong>Using a 360° LiDAR Sensor</strong>: Our current TF Luna LiDAR sensors can only see in 1 direction. If we use a 360° LiDAR sensor, the robot will be able to see everything around it, which can significantly improve its performance.</li>
-<br>
-<li><strong>Using ROS2</strong>: Using the Robot Operation System 2 (ROS2) would be much better. This OS is custom-made for robots and has a lot of features. Using this will improve the performance of the robot.</li>
 </ol>
 
 ## Obstacle Management
@@ -1149,6 +1144,15 @@ Another major problem was that it was often colliding into the traffic signs as 
 <br><br>
 To fix this, we added a reverse failsafe. We basically made it so that if the block was right in front of the robot, the robot would reverse and then continue.
 </li>
+</ol>
+
+### Potential Improvements
+<ol>
+<li><strong>Using a 360° LiDAR Sensor</strong>: Our current TF Luna LiDAR sensors can only see in 1 direction. If we use a 360° LiDAR sensor, the robot will be able to see everything around it, which can significantly improve its performance.</li>
+<br>
+<li><strong>Using ROS2</strong>: Using the Robot Operation System 2 (ROS2) would be much better. This OS is custom-made for robots and has a lot of features. Using this will improve the performance of the robot.</li>
+<br>
+<li><strong>Using PID</strong>: We are currently using just KP to move straight. It would be better if we implement the full PID algorithm (KP, KI, and KD). This will make the robot movements smoother</li>
 </ol>
 
 ## Engineering Factor
