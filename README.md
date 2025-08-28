@@ -37,6 +37,7 @@ This repository contains all of the documentation for team The Statesmen in the 
 * [Obstacle Management](#obstacle-management)
   * [Open Challenge](#open-challenge)
   * [Obstacle Challenge](#obstacle-challenge)
+  * [Problems Faced](#problems-we-faced-and-how-we-solved-them-2)
 * [Engineering Factor](#engineering-factor)
 * [Robot Construction Guide](#robot-construction-guide)
 
@@ -851,6 +852,19 @@ To detect the blocks, we are running OpenCV on the Raspberry Pi. The block detec
   style="width:600px; object-fit:cover; object-position:top;"
 />
 
+### ESP32-Rasberry Pi Communication
+<img
+src="./other/README-images/ObstacleManagement/RPi_To_ESP32.jpg"
+alt="Open Challenge Flowchart"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+<img
+src="./other/README-images/ObstacleManagement/ESP32_To_RPi.jpg"
+alt="Open Challenge Flowchart"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
 ### Code Snippet for Detecting Blocks
 ```
 import cv2
@@ -1134,8 +1148,10 @@ The full source code of the robot is provided [here](https://github.com/WRO-Team
 <li><strong>Block not Being Detected in Different Lighting Conditions</strong>
 At first, we were using HSV ranges. A major problem with them was they were extremely unreliable. They caused a lot of noise and didn't work if the lighting changed.
 <br><br>
-To fix this, we used the LAB color space. This works better with different lighting conditions. You can see about it [here](#block-detection)
+To fix this, we used the LAB color space. This works better with different lighting conditions. You can see about it
 </li>
+
+[here](#block-detection)
 
 <br>
 <li>
@@ -1241,3 +1257,8 @@ Step 4 - Install the required libraries and code
 
 ### Step 8 - Run the Code
 To run the code on the Raspberry Pi, all you need to do is run the command `./venv/bin/python3 ./src/final-code/obstacle-challenge/obstacle-challenge.py`
+
+## The Challenge
+You can view the challenge rules [here](https://wroindia.org/wp-content/uploads/2025/01/WRO-2025-Future-Engineers-Self-Driving-Cars-General-Rules.pdf)
+
+You can find the playfield [here](https://wroindia.org/wp-content/uploads/2025/01/WRO-2025_FutureEngineers_Playfield-1.pdf)
