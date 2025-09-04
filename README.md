@@ -1563,3 +1563,6 @@ To run the code on the Raspberry Pi, all you need to do is run the command `./ve
 You can view the challenge rules [here](https://wroindia.org/wp-content/uploads/2025/01/WRO-2025-Future-Engineers-Self-Driving-Cars-General-Rules.pdf)
 
 You can find the playfield [here](https://wroindia.org/wp-content/uploads/2025/01/WRO-2025_FutureEngineers_Playfield-1.pdf)
+
+## Randomizer
+We also made a randomizer for automatically setting up a randomization. You can view it [here](/other/obstacle-randomizer.zip)
