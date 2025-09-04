@@ -22,9 +22,9 @@ This repository contains all of the documentation for team The Statesmen in the 
 * [Power and Sense Management](#power-and-sense-management)
   * [Li-Ion Battery](#li-ion-battery)
   * [Buck Convertor](#lm2596-buck-converter)
-  * [Power Bank](#power-bank)
+  * [LiPo Battery](#lipo-battery)
   * [ESP32](#esp32-devkit-sbm)
-  * [Raspberry Pi 4](#raspberry-pi-4-sbc)
+  * [Raspberry Pi 5](#raspberry-pi-5-sbc)
   * [Camera](#camera)
   * [TF Luna LiDAR Sensor](#tf-luna-lidar-sensor)
   * [BNO055 Orientation Sensor](#bno055-orentiation-sensor)
@@ -428,7 +428,7 @@ With this, we encountered another problem. If we tried to turn it more than 40 d
 </ol>
 
 ## Power and Sense Management
-Our robot uses an 11.1v Li-ion Battery and a 5V 3A 10,000 mAh power bank for power with a buck converter. An ESP32 Devkit single board microcontroller is used with a Raspberry Pi 4 single board computer. Along with this, 3 TF Luna LiDAR sensors (one at the left, one at the front, and one at the back) are used for disance measurement and a BNO055 orientation sensor to measure the rotation.
+Our robot uses an 11.1v Li-ion Battery and a 2500 mAh 3C 11.1v LiPo battery for power with a buck converter. An ESP32 Devkit single board microcontroller is used with a Raspberry Pi 5 single board computer. Along with this, 4 TF Luna LiDAR sensors (one at the left, two at the front, and one at the back) are used for disance measurement and a BNO055 orientation sensor to measure the rotation.
 
 ### Li-Ion Battery
 We are using an 11.1v Li-ion battery pack
@@ -474,8 +474,22 @@ We are using an 11.1v battery, but the ESP32 requires 5v to be provided to it. T
 
 You can buy the LM2596 Buck Converter [here](https://robu.in/product/lm2596s-dc-dc-buck-converter-power-supply/)
 
-### Power Bank
-We are using a 10,000 mAh power bank to power the Raspberry Pi. This power bank gives a 5V output at 3A, as required by the Raspberry Pi.
+### LiPo Battery
+We are using a lithium polymer (LiPo) battery to power the Raspberry Pi.
+<table>
+  <tr>
+    <td width="250x" style="text-align: left;">
+      <img src="./other/README-images/Components/LiPo.jpeg" alt="LiPo battery" width="250px">
+    </td>
+    <td width="500px" style="text-align: left; vertical-align: top;">
+      <h3>Specifications:</h3>
+      <li>Output Voltage: 11.1v</li>
+      <li>Capacity: 2500 mAh</li>
+      <li>Discharge Rate: 3C</li>
+      <li>Maximum Current: 3C * 2.5Ah = 7.5A</li>
+    </td>
+  </tr>
+</table>
 
 ### ESP32 Devkit SBM
 We are using an ESP32 Devkit single board microcontroller.
@@ -503,19 +517,18 @@ Here is the pinout diagram for this ESP32:
 
 <img src="./other/README-images/Components/ESP32_Pinout.jpg" alt="ESP32 Devkit Pinout" width="1000px">
 
-### Raspberry Pi 4 Model B SBC
-We are using the Raspberry Pi 4 Model B 8 GB RAM single board computer. We have chosen this after considering multiple options. We ended up on this one because of its cost and technical specifications mentioned below.
+### Raspberry Pi 5 SBC
+We are using the Raspberry Pi 5 Model B 8 GB RAM single board computer. We have chosen this after considering multiple options. We ended up on this one because of its cost and technical specifications mentioned below.
 
 <table>
   <tr>
     <td width="250x" style="text-align: left;">
-      <img src="./other/README-images/Components/RaspberryPi.jpeg" alt="Raspberry Pi 4" width="250px">
+      <img src="./other/README-images/Components/RaspberryPi.jpeg" alt="Raspberry Pi 5" width="250px">
     </td>
     <td width="500px" style="text-align: left; vertical-align: top;">
       <h3>Specifications:</h3>
-      <li>Supply Voltage and Current (Optimal): 5.1v at 3A</li>
-      <li>Supply Voltage and Current (Minimum): 5v ± 0.25v at 2.5A</li>
-      <li>CPU: Broadcom BCM2711 Quadcore Cortex-A72 - 64-bit SoC @ 1.8GHz</li>
+      <li>Supply Voltage and Current (Optimal): 5.1v at 5A</li>
+      <li>CPU: Broadcom BCM2712 Quadcore Cortex-A76 - 64-bit SoC @ 2.4GHz</li>
       <li>RAM: 8GB</li>
       <li>USB Type A Ports: 4</li>
       <li>GPIO Pins: 28</li>
@@ -523,9 +536,9 @@ We are using the Raspberry Pi 4 Model B 8 GB RAM single board computer. We have 
   </tr>
 </table>
 
-Here is the pinout of the Raspberry Pi 4 Model B
+Here is the pinout of the Raspberry Pi 5
 
-<img src="https://www.raspberrypi.com/documentation/computers/images/GPIO-Pinout-Diagram-2.png" alt="Raspberry Pi 4 Model B Pinout" width="1000px">
+<img src="other/README-images/Components/RPi5Pinout.jpg" alt="Raspberry Pi 5 Pinout" width="1000px">
 
 ### Camera
 We are using the FINGERS 1080p Hi-Res camera. We chose this camera after considereing multiple factors like its field of view, high resolution, and color saturation.
@@ -625,11 +638,25 @@ Here is the pinout of the BNO055 sensor:
 </table>
 
 ### Connection Diagram for Sensors
+#### Connection for Sensors Connected to ESP32
 <table>
   <tr>
     <td width="50%" style="text-align: left;">
       <img
         src="./other/README-images/ElectricalDiagrams/SensorManagement.png"
+        alt="Sesnsor System Connections"
+        style="width:100%; object-fit:cover; object-position:top;"
+      >
+    </td>
+  </tr>
+</table>
+
+#### Connection for Sensors Connected to Raspberry Pi
+<table>
+  <tr>
+    <td width="50%" style="text-align: left;">
+      <img
+        src="./other/README-images/ElectricalDiagrams/RPi_LiDAR_Connections.png"
         alt="Sesnsor System Connections"
         style="width:100%; object-fit:cover; object-position:top;"
       >
@@ -729,7 +756,7 @@ void loop() {
 }
 ```
 
-#### Running a TF Luna with Raspberry Pi 4
+#### Running a TF Luna with Raspberry Pi 5
 ```
 import serial
 import time
@@ -776,20 +803,22 @@ At first, we were using the Li-ion battery to power the Raspberry Pi. We faced 2
 
 Firstly, the Li-ion battery didn't give a proper constant output. There were a lot of voltage spikes and drops. This caused the Raspberry Pi to shut down in the middle of running. To fix this, we stopped powering the Raspberry Pi from the pins but instead gave it power through the USB-C port. This is because the USB-C port has built-in protection circuitry
 
-Next, another problem we faced was the the Pi didn't receive enough current. We are using 2C 3.7v 2200mAh cells, which create a 2C 11.1v 2200mAh battery. 2.2 Ah * 2C = 4.4 Ah. The Raspberry Pi needs 3 Amps, but a lot of current is also consumed by the motors and other components. The 4.4 Amp battery was working finewe started running the motors. After that, the Pi gave a low voltage warning and soon shut down.
+Next, another problem we faced was the the Pi didn't receive enough current. We are using 2C 3.7v 2200mAh cells, which create a 2C 11.1v 2200mAh battery. 2.2 Ah * 2C = 4.4 Ah. The Raspberry Pi needs 5 Amps, and a lot of current is also consumed by the motors and other components. The 4.4 Amp battery was working fine we started running the motors. After that, the Pi gave a low voltage warning and soon shut down.
 
-Finally, we settled on using a separate power bank with a 5V 3A output, which is sufficient for a Raspberry Pi 4B.
+After that, we used a power bank. The problem with it was that was that it had a 5V 3A output, which was enough was a Raspberry Pi 4 but not for a Raspberry Pi 5
+
+Finally, we settled on LiPo battery. This battery had a 2500 mAh capacity with a 3C discharge rate. This allowed for a maximum current of 7.5A. This battery is only used for the Raspberry Pi so that there are no voltage drops due to the motor or other components.
 </li>
 
 <li>
-<strong>3 TF Luna sensors not working on ESP32</strong>
-At first, we tried to connect all the TF Luna sensors to the ESP32. This did not work because the ESP32 only support 2 UART connections (excluding the USB bort Serial). To counter this problem, we connected the front sensor to the Raspberry Pi. This would not cause any issues at all since the front sensor isn't needed for the open challenge (the open challenge is fully run by the ESP32).
+<strong>4 TF Luna sensors not working on ESP32</strong>
+At first, we tried to connect all the TF Luna sensors to the ESP32. This did not work because the ESP32 only support 2 UART connections (excluding the USB bort Serial). To counter this problem, we connected the front sensors to the Raspberry Pi. This would not cause any issues at all since the front sensors aren't needed for the open challenge (the open challenge is fully run by the ESP32).
 </li>
 </ol>
 
 ### Potential Improvements
 <ol>
-<li><strong>Using a LiPo Battery Instead of Li-Ion</strong>: This is because LiPo batteries generally have higher C-ratings. They can be 10C instead of out current 2C. This would allow us to remove to the power bank and directly power the Raspberry Pi with it</li>
+<li><strong>Using a sing LiPo Battery Instead of Li-Ion and LiPo</strong>: We can use a different LiPo battery with a capacity of ~3000 mAh and a discahrge rate of 5C+. This will remove the need for the Li-ion battery.</li>
 <br>
 <li><strong>Using a Supercapacitor Buffer</strong>: This will stabilize and smooth out the output from the battery. It will smooth out voltage spikes and dips when motors suddenly draw high current, protecting the components</li>
 <br>
@@ -1428,14 +1457,19 @@ Also, there is another way of checking communication on the ESP32 end. The ESP32
 <img
 src="./other/README-images/SoftwareIntegration/SerialMonitorDebugging.jpg"
 alt="Error Checking RPi"
-style="width:700px; object-fit:cover; object-position:top;"
+style="width:500px; object-fit:cover; object-position:top;"
 />
 
 
 To easily be able to send data to the ESP32 without using the serial monitor, we createed a custom python program with `pygame` to control the robot
 
-[Insert Pygame Code Here]
-[Insert Pygame Screenshot Here]
+You can see the code of the program [here](/src/tools/pygame-debugging.py)
+
+<img
+src="./other/README-images/SoftwareIntegration/PygameDebuggingSoftware.png"
+alt="Pygame Debugging"
+style="width:700px; object-fit:cover; object-position:top;"
+/>
 
 #### Image Processing Debugging
 Also, we made it so that when the robot is running, we can connect to the Raspberry Pi via VNC and see the live camera feed. This camera feed will show all the blocks detected and how the robot is taking decisions. You can view it [here](/other/README-images/SoftwareIntegration/Debugging.mp4)
@@ -1448,11 +1482,11 @@ Firstly, you will need to print all the parts. The *.STL files to be printed are
 Next, you will need to assemble the chassis. The guide to assemble the chassis is given [here](https://github.com/WRO-Team-TheStatesmen/wro2025-fe-statesmen/blob/main/other/README-images/Chassis/ChassisAssembly.pdf). We have used lego parts for the chassis to make it so that we can easily change it.
 
 ### Step 3 - Attach the Components
-<strong>Step 1 - Insert the battery and power bank in the chassis in the section shown below</strong>
+<strong>Step 1 - Insert the batteries in the chassis in the section shown below</strong>
 
 <img src="./other/README-images/RobotConstructionGuide/Step3-1.png" alt="Step 3 - 1" width="500px">
 
-You may secure the battery and power bank using double sided tape
+You may secure the batteries using double sided tape
 
 <strong>Step 2 - Screw the TF Luna LiDAR sensors to the 3D printed mounts and attach those mounts to the chassis as shown below</strong>
 
