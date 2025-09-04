@@ -1,7 +1,6 @@
 <center><h1> The Statesmen 2025 </center>
 
 This repository contains all of the documentation for team The Statesmen in the World Robot Olympiad 2025, Future Engineers category. This README.md file is the engineering notebook.
-<!-- It is preferred to view this document [here](https://github.com/WRO-Team-TheStatesmen/wro2025-fe-statesmen/blob/main/README.md) -->
 
 ## Table of Contents
 * [Our Team](#our-team)
@@ -9,7 +8,7 @@ This repository contains all of the documentation for team The Statesmen in the 
   * [Arham Jain](#arham-jain)
   * [Yashvardhan Surana](#yashvardhan-surana)
 * [Robot Photos](#robot-photos)
-* [Robot Videos](#robot-videos)
+* [Performance Videos](#robot-videos)
 * [Mobility Management](#mobility-management)
   * [Motor](#motor)
   * [Motor Driver](#motor-driver)
@@ -38,7 +37,14 @@ This repository contains all of the documentation for team The Statesmen in the 
   * [Open Challenge](#open-challenge)
   * [Obstacle Challenge](#obstacle-challenge)
   * [Problems Faced](#problems-we-faced-and-how-we-solved-them-2)
+  * [Possible Improvements](#potential-improvements-1)
 * [Engineering Factor](#engineering-factor)
+* [Software Integration](#software-integration)
+  * [System Architecture](#system-architecture)
+  * [Communication Protocol](#communication-protocol)
+  * [Code Modularity](#code-modularity)
+  * [Communication API](#communication-api)
+  * [Debugging](#debugging)
 * [Robot Construction Guide](#robot-construction-guide)
 
 ## Our Team
@@ -62,7 +68,7 @@ Hello, I am Arham, an 11th-grade student at Neerja Modi School. I have competed 
 <img src="./other/README-images/OurTeam/Arham.jpg" alt="Arham Jain" width="200px">
 
 ### Yashvardhan Surana
-Hello, I'm Yash. I am a 9th grader from Jaipur. This is my second time participating in WRO. Last year, I had participated in the Future Innovators category. This year, I'm taking part in the Future Engineers category in the team The Statesmen. In The Statesmen, I am in charge of the hardware of the robot.
+Hello, I'm Yash. I am a 6th grader from Jaipur. This is my second time participating in WRO. Last year, I had participated in the Future Innovators category. This year, I'm taking part in the Future Engineers category in the team The Statesmen. In The Statesmen, I am in charge of the hardware of the robot.
 
 <img src="./other/README-images/OurTeam/Yash.jpg" alt="Yashvardhan Surana" width="200px">
 
@@ -100,7 +106,9 @@ If the video is not loading for you, you can view it [here](https://youtu.be/VSA
 
 If the video is not loading for you, you can view it [here](https://youtu.be/7XdKwXTz3Lk)
 
-<!-- ### Obstacle Challenge - Setup 1 -->
+### Obstacle Challenge - Setup 1
+You can view this video [here](https://www.youtube.com/watch?v=GN4vLTXXRtY)
+
 You can watch all the videos on our [youtube channel](https://www.youtube.com/@TheStatesmen-fe)
 
 ## Mobility Management
@@ -207,6 +215,7 @@ We are using an ackermann steering geometry to steer the robot. This system runs
       <h3>Specifications:</h3>
       <li>Angle Constaint: 0° to 360°</li>
       <li>Input Voltage: 4.8v to 6v</li>
+      <li>Stall Torque: 1.8 kg/cm</li>
     </td>
   </tr>
 </table>
@@ -413,7 +422,9 @@ With this, we encountered another problem. If we tried to turn it more than 40 d
 <li><strong>Using Metal Gears for the Rear Differential</strong> so that it can withstand higher speeds</li>
 <li><strong>Using a Heat Sink or Active Cooling for the Motor Driver</strong> so that it doesn't get too hot much while being used</li>
 <li><strong>Using Four-Wheel Drive</strong> for better movement</li>
+<li><strong>Using All-Wheel Steering</strong> for better and faster turning</li>
 <li><strong>Using a Custom Gearbox</strong> instead of relying on the BO motor's gear ratio to create an optimized gear ratio</li>
+<li><strong>Using a Fully 3D Printed Chassis</strong> instead of using lego parts so that the robot is as light as possible</li>
 </ol>
 
 ## Power and Sense Management
@@ -854,14 +865,14 @@ To detect the blocks, we are running OpenCV on the Raspberry Pi. The block detec
 
 ### ESP32-Rasberry Pi Communication
 <img
-src="./other/README-images/ObstacleManagement/RPi_To_ESP32.jpg"
-alt="Open Challenge Flowchart"
+src="./other/README-images/ObstacleManagement/RPi_To_ESP32.png"
+alt="Data sent from RPi to ESP32"
 style="width:500px; object-fit:cover; object-position:top;"
 />
 
 <img
-src="./other/README-images/ObstacleManagement/ESP32_To_RPi.jpg"
-alt="Open Challenge Flowchart"
+src="./other/README-images/ObstacleManagement/ESP32_To_RPi.png"
+alt="Data Sent from ESP32 to RPi"
 style="width:500px; object-fit:cover; object-position:top;"
 />
 
@@ -1174,6 +1185,261 @@ To fix this, we added a reverse failsafe. We basically made it so that if the bl
 ## Engineering Factor
 As shown in the previous sections, we have used our own design for the vehicle. We have also used off the shelf electrical components such as motors and sensors.
 
+## Software Integration
+Our robot relies not only on the hardware, but our seamless integration of our software with every single component. We have made a modular software architecture that separates low-level hardware control, communication protocols, and high-level decision-making
+
+<img
+src="./other/README-images/SoftwareIntegration/Flowchart.png"
+alt="Software Integration Flowchart"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+### System Architecture
+The ESP32 acts as a hub between the Raspberry Pi and the motor, servo motor, the BNO055 orientation sensor and 2 LiDAR sensors. The ESP32 is connected to these components. It is only reponsible for sending data to and receiving data from them. It acts as a hub in the middle.
+
+<img
+src="./other/README-images/SoftwareIntegration/ESP32-Components-Integration.png"
+alt="ESP32 Integration with Components"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+The Raspberry Pi is the brain of our robot. It is responsible for image processing and making decisions. It is also connected to the front LiDAR sensor because the ESP32 can only handle 2 UART connections.
+
+<img
+src="./other/README-images/SoftwareIntegration/RaspberryPi-Integration.png"
+alt="Raspberry Pi Integration with Components"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+### Communication Protocol
+The Raspberry Pi needs to have all the data to make proper decisions. It needs data recorded by the ESP32 for that. For this, we have created a csv-based serial communication system between the Raspberry Pi and ESP32.
+
+The Raspberry Pi is connected to the ESP32 via a USB cable. The ESP32 sends the data to the Raspberry Pi over a serial connection at a baud rate of 115200, which means 115200 signal changes per second.
+
+The ESP32 sends 3 values to the ESP32:
+
+| Data Value 1 | Data Value 2             | Data Value 3              |
+|--------------|--------------------------|---------------------------|
+| BNO055 Heading (*Orientation.x*) | Left Distance from TF Luna | Right Distance from TF Luna |
+
+<img
+src="./other/README-images/SoftwareIntegration/ESP32_To_RPi.png"
+alt="Data Sent from ESP32 to RPi"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+After the ESP32 receives all the data, it processes it. It detects the location of the block and based on that it decides where the robot should go. For that, it needs to send the data to the ESP32. The Raspberry Pi sends 3 values to the ESP32.
+
+| Data Value 1 | Data Value 2             | Data Value 3              |
+|--------------|--------------------------|---------------------------|
+| Speed | Movement Direction (Front/Back) | Steer Angle |
+
+<img
+src="./other/README-images/SoftwareIntegration/RPi_To_ESP32.png"
+alt="Data sent from RPi to ESP32"
+style="width:500px; object-fit:cover; object-position:top;"
+/>
+
+
+#### Error Checks
+In data communication, there is also a small chance of errors. To prevent this, whenever data is received it is checked for errors.
+
+1. If more than 3 data values are received, then that whole piece of data is discarded and considered having errors
+
+2. If the data values received contain characters other that numbers, the data is discarded and considered having errors
+
+3. If the value of the data exceeds the bounds, the data is discarded and considered having errors
+
+#### Error Checking for Data Received by ESP32
+<img
+src="./other/README-images/SoftwareIntegration/ErrorCheckESP32.png"
+alt="Error Checking ESP32"
+style="width:700px; object-fit:cover; object-position:top;"
+/>
+
+#### Error Checking for Data Received by ESP32
+<img
+src="./other/README-images/SoftwareIntegration/ErrorCheckRPi.png"
+alt="Error Checking RPi"
+style="width:700px; object-fit:cover; object-position:top;"
+/>
+
+### Code Modularity (Hardware Abstraction Layer)
+We have structured our code in a modular way. Each component of the robot is handled by a dedicated function. This ensures that our script remains easily understandable and changes can be made without any trouble. The code can also easily be understood and reused
+
+#### Function for TF Luna
+```
+void updateTFLuna(HardwareSerial &sensor, volatile int &distanceVar) {
+  while (sensor.available() >= 9) {
+    if (sensor.read() == 0x59 && sensor.read() == 0x59) {
+      byte low = sensor.read();
+      byte high = sensor.read();
+      int distance = (high << 8) + low;
+
+      for (int i = 0; i < 5; i++) sensor.read();
+
+      if (distance <= 500)
+      {
+        distanceVar = distance;
+      }
+    }
+  }
+}
+```
+
+This function works in a special way. Instead of returning a value, this function updates a global variable. This way, we can make sure that the program doesn't slow down as the clock speed of the TF Luna and the ESP32 is different. Earlier, it was slowing down is it waited until the TF Luna sent a value. Now, it only updates the variable when the TF Luna sends a value.
+
+#### Function for BNO055
+```
+void updateBNO055(Adafruit_BNO055 &bno, volatile float &headingVar) {
+  sensors_event_t orientationData;
+  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+  headingVar = orientationData.orientation.x;
+}
+```
+
+This function works in the same way as the `updateTFLuna()` function
+
+#### Function for Motor
+```
+void setMotor(int speed, int direction) {
+  speed = constrain(speed, 0, 255);
+
+  if (direction == 0) {  
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+  }
+  else if (direction == 1) {  
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+  }
+
+  analogWrite(ENA, speed);
+}
+```
+
+#### Function for Servo Motor
+```
+void moveServoAngle(int angle) {
+  angle = constrain(angle, 0, 180);
+  int pulsewidth = map(angle, 0, 180, 500, 2400);
+  digitalWrite(servoPin, HIGH);
+  delayMicroseconds(pulsewidth);
+  digitalWrite(servoPin, LOW);
+  delay(20 - pulsewidth / 1000);
+}
+
+void steer(int angleOffset) {
+  moveServoAngle(servoCenter + angleOffset);
+}
+```
+
+To control our steering system from the MG90 servo motor, we created 2 functions.
+
+`moveServoAngle()` is a low-level function that sends a PWM signal. We used this instead of ledcWrite because of 3 main reasons
+1. ledcWrite is unreliable
+2. Precise control over pulse width
+3. Modularity and clarity
+
+`steer()` is a high-level function. This lets us directly decide what direction the robot goes in. It automatically accounts for the center position of the servo motor. If we put the value 0, the robot travels straight, + means right, and - means left.
+
+#### Function for LiDAR Sensor (Raspberry Pi)
+```
+def get_front(port="/dev/ttyAMA0", baud=115200, timeout=0.1):
+    try:
+        with serial.Serial(port, baud, timeout=timeout) as ser:
+            frame = ser.read(9)
+            if len(frame) != 9:
+                return None
+
+            if frame[0] != 0x59 or frame[1] != 0x59:
+                return None
+
+            dist = frame[2] | (frame[3] << 8)
+            return dist if dist >= 0 else None
+    except serial.SerialException as e:
+        return None
+```
+
+### Communication API (Communication Layer)
+We created specialized python functions to have a communication system which can be debugged, edited, and understood easily
+
+#### readData()
+```
+def read_data(DEBUG: bool = False):
+    try:
+        line = ser.readline().decode(errors="ignore").strip()
+        if not line:
+            if DEBUG:
+                print("No data received from serial.")
+            return None, None, None, None
+
+        parts = line.split(",")
+        if len(parts) != 3:
+            if DEBUG:
+                print(f"Invalid data format: {line}")
+            return None, None, None, None
+
+        angle = normalize_angle(int(parts[0]))
+        left = int(parts[1])
+        right = int(parts[2])
+
+        front = get_front(port=LIDAR_PORT) if DIRECTION else 100 # A default value of 100 is returned if the robot does not know the direction yet to avoid errors
+
+        if DEBUG:
+            print(f"Read -> Angle: {angle}, Left: {left}, Front: {front}, Right: {right}")
+
+        return angle, left, front, right
+
+    except (ValueError, UnicodeDecodeError) as e:
+        if DEBUG:
+            print(f"Data parsing error: {e}")
+        return None, None, None, None
+    except Exception as e:
+        if DEBUG:
+            print(f"Unexpected error in read_data: {e}")
+        return None, None, None, None
+```
+
+This function is used to read the incoming data from the ESP32. It will be run on the Raspberry Pi.
+
+#### sendData()
+```
+def send_data(speed, direction, steer, DEBUG=False):
+    cmd = f"{speed},{direction},{steer}\n"
+    if DEBUG:
+      print(f"Data Sent: {cmd}")
+    ser.write(cmd.encode())
+```
+
+This function is used to send the speed, movement direction (front or back), and steer angle to the ESP32. Once the raspberry pi makes a decision, it can use this function to send that decision.
+
+### Debugging
+Throughout development, there were multiple challenges in the hardware-software integration, such as incorrect sensor readings, communication errors, etc. To address these issues, we created a structured debugging process.
+
+#### Component Debugging (Unit Testing)
+If there is a problem in any single component, we have a way of debuggin that as well. You can see [here](/src/invididual-components/) that we have individual programs to test out individual components. With this, we can know exactly what problem is being faced.
+
+#### Communication Debugging (Integration Testing)
+We implemented debugging tools directly within our code. As you can see in the `readData()` and `sendData()` functions, there is a DEBUG parameter. If this parameter is set to `True`, then whatever data is being sent / received will be printed. This makes debugging extremely easy.
+
+Also, there is another way of checking communication on the ESP32 end. The ESP32 can directly be connected to a laptop. Then, the Arduino IDE can be opened. Since the data is sent via serial in csv format, it can easily be seen through the serial monitor. We can also send data easily via the serial monitor to the ESP32
+
+<img
+src="./other/README-images/SoftwareIntegration/SerialMonitorDebugging.jpg"
+alt="Error Checking RPi"
+style="width:700px; object-fit:cover; object-position:top;"
+/>
+
+
+To easily be able to send data to the ESP32 without using the serial monitor, we createed a custom python program with `pygame` to control the robot
+
+[Insert Pygame Code Here]
+[Insert Pygame Screenshot Here]
+
+#### Image Processing Debugging
+Also, we made it so that when the robot is running, we can connect to the Raspberry Pi via VNC and see the live camera feed. This camera feed will show all the blocks detected and how the robot is taking decisions. You can view it [here](/other/README-images/SoftwareIntegration/Debugging.mp4)
+
 ## Robot Construction Guide
 ### Step 1 - Print the Parts
 Firstly, you will need to print all the parts. The *.STL files to be printed are [here](https://github.com/WRO-Team-TheStatesmen/wro2025-fe-statesmen/tree/main/models). We used the Bambu Lab X1-Carbon 3D printer to print everything.
@@ -1245,6 +1511,7 @@ Step 3 - Set up the Raspberry Pi
 <li>Open the terminal</li>
 <li>Enter the command <code>sudo apt update</code></li>
 <li>Enter the command <code>sudo apt upgrade</code></li>
+<li>Enter the command <code>sudo raspi-config</code> and then go to interface options > UART > enable</li>
 </ol>
 
 Step 4 - Install the required libraries and code
